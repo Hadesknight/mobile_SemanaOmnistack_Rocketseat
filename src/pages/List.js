@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
-import api from '../services/api'
-import {Text, View, SafeAreaView, StyleSheet, ScrollView ,AsyncStorage, TouchableOpacity, Image} from 'react-native'
+import socketio from 'socket.io-client'
+import {Text, View, SafeAreaView, StyleSheet, ScrollView ,AsyncStorage, TouchableOpacity, Image, Alert} from 'react-native'
 
 //importando nosso componente que trabalhara mostrando as telas dos spots
 import SpotList from '../components/SpotLists'
@@ -9,8 +9,20 @@ import logo from '../assets/logo.png'
 
 export default function List({navigation}){
     //usando o useState para setar as variaveis para o campo.
-    const[spot, setSpot] = useState('')
     const[techs, setTechs] = useState([])
+
+    useEffect(()=>{
+        AsyncStorage.getItem('user').then(user_id=>{
+            const socket = socketio('http://192.168.20.110:3333',{
+                query:{user_id}
+            })
+        
+            socket.on('booking_request', booking=>{
+                Alert.alert(`Sua reserva em ${booking.spot.company} em ${booking.date} foi ${booking.approved ? 'APROVADA' : 'Negada'}`)})
+            
+        })
+
+    },[])
 
     //quando cai nessa pagina, ele ja busca automaticamente as techs que estão salvas no meu AsyncStorage
     //e ja formata elas, separando por virgula, tirando os espaços e transformando em array
@@ -20,6 +32,7 @@ export default function List({navigation}){
             setTechs(techArrays)
         })
     },[])
+
 
 
     //função logout

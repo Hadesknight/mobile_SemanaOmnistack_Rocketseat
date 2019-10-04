@@ -2,7 +2,9 @@
 
 -- Aqui estamos construindo a versão mobile do sistema que estamos construindo na semana Omnistack
 
--- Em Desenvolvimento, quase acabando
+-- Adicionado funcionalidade com socket.io
+
+-- interação em tempo real, do front end, com mobile, com back end
 
 -- Contem ainda bugs
 
